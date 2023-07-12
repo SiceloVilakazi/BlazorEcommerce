@@ -10,6 +10,6 @@ namespace BlazorEcommerce.Shared
     {
         public T? Data { get; set; }
         public bool success { get; set; } = true;
-        public string Messager { get; set; } = string.Empty;
+        public string Message { get; set; } = string.Empty;
     }
 }
