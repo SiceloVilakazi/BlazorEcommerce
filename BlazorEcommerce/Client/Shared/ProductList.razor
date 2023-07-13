@@ -1,10 +1,10 @@
 ﻿@inject IProductService productService
+@implements IDisposable
 
 @if(productService.Products == null || productService.Products.Count == 0)
 {
     <span>Loading Products...</span>
 }
-
 else
 {
     <ul class="list-unstyled">
@@ -32,8 +32,13 @@ else
 
 @code {
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-         await productService.GetProducts();
+        productService.OnProductChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        productService.OnProductChanged -= StateHasChanged;
     }
 }
