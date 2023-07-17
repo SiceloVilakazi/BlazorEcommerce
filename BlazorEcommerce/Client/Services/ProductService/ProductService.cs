@@ -12,6 +12,9 @@ namespace BlazorEcommerce.Client.Services.ProductService
         }
        public List<Product> Products { get; set; } = new List<Product>();
         public string Message { get; set; } = "Loading Products...";
+        public int CurrentPage { get ; set ; }
+        public int PageCount { get; set ; }
+        public string LastSearchText { get; set; }
 
         public event Action OnProductChanged;
 
@@ -25,7 +28,7 @@ namespace BlazorEcommerce.Client.Services.ProductService
         {
 
             var result = categoryUrl == null ?
-               await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/product") :
+               await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/Product/GetFeaturedProducts") :
                 await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/Product/getByCategory/{categoryUrl}");
             if (result != null && result.Data != null)
                 Products = result.Data;
@@ -41,13 +44,18 @@ namespace BlazorEcommerce.Client.Services.ProductService
 
         }
 
-        public async Task SearchProducts(string searchText)
+        public async Task SearchProducts(string searchText, int page)
         {
             var result = await _httpClient
-                .GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/Product/search/{searchText}");
+                .GetFromJsonAsync<ServiceResponse<ProductSearchResult>>($"api/Product/search/{searchText}/{page}");
             if (result != null && result.Data != null)
-                Products = result.Data;
+                
             if (Products.Count == 0) Message = "No products found.";
+            {
+                Products = result.Data.Products;
+                CurrentPage = result.Data.CurrentPage;
+                PageCount = result.Data.Pages;
+            }
             OnProductChanged?.Invoke();
         }
     }
