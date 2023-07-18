@@ -5,10 +5,12 @@ global using BlazorEcommerce.Client.Services.AuthService;
 global using Microsoft.AspNetCore.Components.Authorization;
 global using BlazorEcommerce.Client.Services.CartService;
 global using BlazorEcommerce.Client.Services.OrderService;
+global using BlazorEcommerce.Client.Services.AddressService;
 using BlazorEcommerce.Client;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+
 
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -25,5 +27,6 @@ builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
 
 await builder.Build().RunAsync();
