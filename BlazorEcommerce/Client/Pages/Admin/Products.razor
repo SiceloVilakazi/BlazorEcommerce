@@ -31,13 +31,16 @@ else
                     <td><img src="@product.ImageUrl" /></td>
                     <td>@product.Title</td>
                     <td>
-                        @foreach (var variant in product.Variants)
+                         @if (!string.IsNullOrEmpty(product.ImageUrl))
                     {
-                        <span>@variant.ProductType.Name</span>
-
-                        <br />
+                        <img src="@product.ImageUrl" />
+                    }
+                    else if (product.Images.Count > 0)
+                    {
+                        <img src="@product.Images[0].Data" />
                     }
                 </td>
+                <td>@product.Title</td>
                 <td>
                     @foreach (var variant in product.Variants)
                     {
